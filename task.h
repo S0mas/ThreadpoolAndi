@@ -1,31 +1,35 @@
 #pragma once
 #include <functional>
 
-template<typename FunctionType>
-class Task {
-
+template<typename MetaDataType>
+class Task
+{
 public:
+  Task(int id, const std::function<void(MetaDataType&)>& work);
 
-Task(const std::function<FunctionType>& work);
+  void doWork(MetaDataType& metadata);
 
-void doWork();
-
+  int getId() const;
 
 private:
-
-std::function<FunctionType> workToDo;
-
-
-
+  int id;
+  std::function<void(MetaDataType&)> workToDo;
 };
 
-template <typename FunctionType>
-Task<FunctionType>::Task(const std::function<FunctionType>& work) : workToDo(work)
+template<typename MetaDataType>
+Task<MetaDataType>::Task(const int id, const std::function<void(MetaDataType&)>& work)
+  : id(id), workToDo(work)
 {
 }
 
-template <typename FunctionType>
-void Task<FunctionType>::doWork() 
-{ 
-    workToDo(); 
+template<typename MetaDataType>
+void Task<MetaDataType>::doWork(MetaDataType& metadata)
+{
+  workToDo(metadata);
+}
+
+template<typename MetaDataType>
+int Task<MetaDataType>::Task::getId() const
+{
+  return id;
 }
